@@ -366,17 +366,6 @@ class CoachBot:
             logger.error(f"Error en setup_handlers: {e}")
             raise
 
-    # Función auxiliar para detectar si el bot fue mencionado en el mensaje
-    def bot_was_mentioned(self, update: Update) -> bool:
-        if update.message.entities:
-            for entity in update.message.entities:
-                if entity.type == "mention":
-                    mentioned_text = update.message.text[entity.offset:entity.offset + entity.length].lower()
-                    bot_username = "@" + self.telegram_app.bot.username.lower()
-                    if mentioned_text == bot_username:
-                        return True
-        return False
-
     async def handle_voice_message(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         try:
             chat_id = update.message.chat.id
@@ -515,12 +504,6 @@ class CoachBot:
     async def handle_message(self, update: Update, context: ContextTypes.DEFAULT_TYPE):
         try:
             chat_id = update.message.chat.id
-            user_id = update.message.from_user.id
-            # Verificar si el remitente es administrador o creador y si no se menciona al bot, ignorar el mensaje
-            member = await context.bot.get_chat_member(chat_id, user_id)
-            if member.status in ['administrator', 'creator'] and not self.bot_was_mentioned(update):
-                return
-
             user_message = update.message.text.strip()
             if not user_message:
                 return
