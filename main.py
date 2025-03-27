@@ -609,8 +609,6 @@ async def startup_event():
     except Exception as e:
         logger.error("❌ Error al iniciar la aplicación: " + str(e))
 
-# <--- ESTE ENDPOINT DEBE COINCIDIR CON LA URL QUE ENVIARÁS A TELEGRAM --->
-
 @app.post("/webhook")
 async def webhook(request: Request):
     try:
@@ -621,4 +619,3 @@ async def webhook(request: Request):
     except Exception as e:
         logger.error("❌ Error procesando webhook: " + str(e))
         return {"status": "error", "message": str(e)}
-
